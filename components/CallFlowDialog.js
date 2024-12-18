@@ -11,6 +11,7 @@ import {
   Box,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CloseIcon from '@mui/icons-material/Close'; // Импортируем CloseIcon
 import { callFlows } from '../data/callFlows';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -89,15 +90,24 @@ const CallFlowDialog = ({ open, onClose, service }) => {
         <Typography variant="h6">
           Структура вызова {service?.name} (Телефон: {service?.phone})
         </Typography>
+        {/* Кнопка "Назад", отображается только если есть история */}
         {history.length > 1 && (
           <IconButton
             aria-label="назад"
             onClick={handleBack}
-            sx={{ position: 'absolute', right: 8, top: 8 }}
+            sx={{ position: 'absolute', left: 8, top: 8 }}
           >
             <ArrowBackIcon />
           </IconButton>
         )}
+        {/* Кнопка закрытия */}
+        <IconButton
+          aria-label="закрыть"
+          onClick={handleClose}
+          sx={{ position: 'absolute', right: 8, top: 8 }}
+        >
+          <CloseIcon />
+        </IconButton>
       </DialogTitle>
       <DialogContent dividers>
         {currentNode.question ? (
