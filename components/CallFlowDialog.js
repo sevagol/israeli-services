@@ -88,7 +88,7 @@ const CallFlowDialog = ({ open, onClose, service }) => {
     >
       <DialogTitle id="call-flow-dialog-title" sx={{ position: 'relative' }}>
         <Typography variant="h6">
-          Структура вызова {service?.name} (Телефон: {service?.phone})
+           {service?.name}
         </Typography>
         {/* Кнопка "Назад", отображается только если есть история */}
         {history.length > 1 && (
