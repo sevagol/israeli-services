@@ -87,7 +87,7 @@ export default function MyApp(props) {
   return (
     <React.Fragment>
       <Head>
-        <title>Структуры вызовов сервисов</title>
+        <title>Израильские автоответчики</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
       <ThemeProvider theme={theme}>
