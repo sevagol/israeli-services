@@ -16,9 +16,6 @@ const Footer = () => {
 
   return (
     <Box sx={{ mt: 8, mb: 4, textAlign: 'center' }}>
-      <Typography variant="h6" gutterBottom>
-        Поделитесь нашим сайтом
-      </Typography>
       <Stack direction="row" spacing={2} justifyContent="center" mt={2}>
         <Button
           variant="contained"
