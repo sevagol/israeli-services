@@ -11,11 +11,10 @@ import {
   Box,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import CloseIcon from '@mui/icons-material/Close'; // Импортируем CloseIcon
+import CloseIcon from '@mui/icons-material/Close';
 import { callFlows } from '../data/callFlows';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import axios from 'axios';
 
 const CallFlowDialog = ({ open, onClose, service }) => {
   const [currentNodeId, setCurrentNodeId] = useState(null);
@@ -97,26 +96,31 @@ const CallFlowDialog = ({ open, onClose, service }) => {
       fullScreen={isMobile}
       aria-labelledby="call-flow-dialog-title"
     >
-      <DialogTitle id="call-flow-dialog-title" sx={{ position: 'relative' }}>
-        <Typography variant="h6">
-         {service?.name}
+      <DialogTitle
+        id="call-flow-dialog-title"
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '16px',
+        }}
+      >
+        {/* Левая область: кнопка "назад" или пустой контейнер */}
+        <Box sx={{ width: '40px' }}>
+          {history.length > 1 ? (
+            <IconButton aria-label="назад" onClick={handleBack}>
+              <ArrowBackIcon />
+            </IconButton>
+          ) : null}
+        </Box>
+
+        {/* Центральная область: заголовок */}
+        <Typography variant="h6" sx={{ flexGrow: 1, textAlign: 'center' }}>
+          {service?.name}
         </Typography>
-        {/* Кнопка "Назад", отображается только если есть история */}
-        {history.length > 1 && (
-          <IconButton
-            aria-label="назад"
-            onClick={handleBack}
-            sx={{ position: 'absolute', left: 8, top: 8 }}
-          >
-            <ArrowBackIcon />
-          </IconButton>
-        )}
-        {/* Кнопка закрытия */}
-        <IconButton
-          aria-label="закрыть"
-          onClick={handleClose}
-          sx={{ position: 'absolute', right: 8, top: 8 }}
-        >
+
+        {/* Правая область: кнопка закрытия */}
+        <IconButton aria-label="закрыть" onClick={handleClose}>
           <CloseIcon />
         </IconButton>
       </DialogTitle>
@@ -127,7 +131,7 @@ const CallFlowDialog = ({ open, onClose, service }) => {
               <Typography variant="subtitle1">{currentNode.question}</Typography>
             </Box>
             <Stack spacing={2}>
-              {Object.entries(currentNode.options).map(([key, label], index) => (
+              {Object.entries(currentNode.options).map(([key, label]) => (
                 <Button
                   key={key}
                   variant="contained"
@@ -168,9 +172,7 @@ const CallFlowDialog = ({ open, onClose, service }) => {
             </Stack>
           </>
         ) : (
-          <Typography variant="subtitle1">
-            Спасибо!
-          </Typography>
+          <Typography variant="subtitle1">Спасибо!</Typography>
         )}
       </DialogContent>
     </Dialog>
