@@ -11,6 +11,9 @@ import {
   Typography,
   Link,
   useMediaQuery,
+  Grid,
+  Card,
+  CardContent,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
@@ -23,16 +26,37 @@ const ServiceTable = ({ services, onServiceClick }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  if (isMobile) {
+    return (
+      <Grid container spacing={2}>
+        {services.map((service) => (
+          <Grid item xs={12} key={service.id}>
+            <Card onClick={() => onServiceClick(service)} sx={{ cursor: 'pointer', borderRadius: '16px' }}>
+              <CardContent>
+                <Typography variant="h6" color="primary">
+                  {service.name}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Телефон: {service.phone}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    );
+  }
+
   return (
     <TableContainer component={Paper} elevation={3} sx={{ borderRadius: '16px' }}>
       <Table aria-label="services table" size={isMobile ? 'small' : 'medium'}>
         <TableHead>
           <TableRow>
             <TableCell>
-              <Typography variant="h6">Название сервиса</Typography>
+              <Typography variant="h6">Сервис</Typography>
             </TableCell>
             <TableCell>
-              <Typography variant="h6">Номер телефона</Typography>
+              <Typography variant="h6">Телефон</Typography>
             </TableCell>
           </TableRow>
         </TableHead>

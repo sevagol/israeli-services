@@ -15,16 +15,12 @@ import CloseIcon from '@mui/icons-material/Close'; // Импортируем Clo
 import { callFlows } from '../data/callFlows';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import axios from 'axios';
 
-/**
- * Компонент диалога для отображения структуры вызова
- * @param {Boolean} open - Открыт ли диалог
- * @param {Function} onClose - Обработчик закрытия диалога
- * @param {Object} service - Выбранный сервис
- */
 const CallFlowDialog = ({ open, onClose, service }) => {
   const [currentNodeId, setCurrentNodeId] = useState(null);
   const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -33,25 +29,35 @@ const CallFlowDialog = ({ open, onClose, service }) => {
       const initialId = '1'; // Начальный узел
       setCurrentNodeId(initialId);
       setHistory([initialId]);
+    } else {
+      // Если сервис не выбран или диалог закрыт, сбрасываем состояние
+      setCurrentNodeId(null);
+      setHistory([]);
     }
   }, [service, open]);
 
-  const currentCallFlow = callFlows[service.phone] || {};
+  // Используем optional chaining для безопасного доступа к service.phone
+  const currentCallFlow = callFlows[service?.phone] || {};
   const currentNode = currentCallFlow[currentNodeId] || {};
 
   /**
    * Обработчик клика по опции
    * @param {String} optionKey - Ключ выбранной опции
    */
-  const handleOptionClick = (optionKey) => {
+  const handleOptionClick = async (optionKey) => {
     const nextNodeId = optionKey;
     if (currentCallFlow[nextNodeId]) {
+      setLoading(true);
+      // Здесь можно добавить дополнительные действия при переходе
       setCurrentNodeId(nextNodeId);
       setHistory((prev) => [...prev, nextNodeId]);
+      setLoading(false);
     } else {
       // Конец структуры вызова
+      setLoading(true);
       setCurrentNodeId(null);
       setHistory((prev) => [...prev, null]);
+      setLoading(false);
     }
   };
 
@@ -77,6 +83,11 @@ const CallFlowDialog = ({ open, onClose, service }) => {
     setHistory([]);
   };
 
+  // Добавляем условный рендеринг: если service отсутствует, не рендерим содержимое
+  if (!service) {
+    return null;
+  }
+
   return (
     <Dialog
       open={open}
@@ -88,7 +99,7 @@ const CallFlowDialog = ({ open, onClose, service }) => {
     >
       <DialogTitle id="call-flow-dialog-title" sx={{ position: 'relative' }}>
         <Typography variant="h6">
-           {service?.name}
+         {service?.name}
         </Typography>
         {/* Кнопка "Назад", отображается только если есть история */}
         {history.length > 1 && (
@@ -123,6 +134,7 @@ const CallFlowDialog = ({ open, onClose, service }) => {
                   onClick={() => handleOptionClick(key)}
                   fullWidth
                   size="large"
+                  disabled={loading}
                   sx={{
                     justifyContent: 'flex-start',
                     textTransform: 'none',
@@ -157,7 +169,7 @@ const CallFlowDialog = ({ open, onClose, service }) => {
           </>
         ) : (
           <Typography variant="subtitle1">
-            Спасибо за использование наших услуг.
+            Спасибо!
           </Typography>
         )}
       </DialogContent>

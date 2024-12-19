@@ -1,10 +1,5 @@
-// pages/_app.js
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import Head from 'next/head';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import '../styles/globals.css'; // Импорт глобальных стилей (если необходимо)
+// src/theme.js
+import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   palette: {
@@ -75,26 +70,4 @@ const theme = createTheme({
   },
 });
 
-export default function MyApp(props) {
-  const { Component, pageProps } = props;
-
-  return (
-    <React.Fragment>
-      <Head>
-        <title>Структуры вызовов сервисов</title>
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
-        {/* Удалите подключение шрифтов из _app.js */}
-      </Head>
-      <ThemeProvider theme={theme}>
-        {/* CssBaseline обеспечивает единый базовый стиль */}
-        <CssBaseline />
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </React.Fragment>
-  );
-}
-
-MyApp.propTypes = {
-  Component: PropTypes.elementType.isRequired,
-  pageProps: PropTypes.object.isRequired,
-};
+export default theme;
